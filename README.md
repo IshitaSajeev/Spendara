@@ -102,3 +102,4 @@ Frontend runs at `http://127.0.0.1:5173/`.
 - [ ] Monthly budget limits with overspend alerts
 - [ ] CSV export of transaction history
 - [ ] Multi-currency support
+"# Spendara" 
