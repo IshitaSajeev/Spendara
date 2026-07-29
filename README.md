@@ -1,105 +1,184 @@
-# 💸 Spendara: AI-Powered Personal Finance Tracker
+# 💰 Spendara
 
-Spendara is a full-stack personal finance application that bridges everyday expense tracking with Machine Learning-driven forecasting. It uses a Linear Regression model trained on your own transaction history to project next month's spending, alongside secure per-user accounts and category-level spending insights.
+> AI-powered personal finance tracker with JWT authentication, ML-driven spending forecasts, and category-level insights.
 
----
-
-### Key Features
-
-- **AI Budget Forecasting** — a Scikit-Learn Linear Regression model predicts next month's spend from your time-series transaction history.
-- **Secure Authentication** — JWT-based login and registration; every transaction and category is scoped to the logged-in user.
-- **Spending by Category** — a live pie chart breaks down expenses by category as you log them.
-- **Add Transactions** — log income or expenses on the fly, with the option to create new categories inline.
-- **Premium UI/UX** — a high-contrast, dark-mode dashboard built with React, Tailwind CSS, and Framer Motion.
-
-### The Machine Learning Engine
-
-- **Algorithm:** Ordinary Least Squares (OLS) Linear Regression.
-- **Process:** The system extracts EXPENSE-type transactions for the logged-in user, converts dates into ordinal values, and trains a model to identify the slope of spending.
-- **Fallback Logic:** Includes smart-averaging fallbacks for small datasets, so the UI always shows a meaningful forecast.
-
-### Tech Stack
-
-**Frontend**
-- Framework: React (Vite)
-- Styling: Tailwind CSS
-- Animation: Framer Motion
-- Charts: Recharts
-- Icons: Lucide React
-- Routing: React Router
-- HTTP Client: Axios
-
-**Backend**
-- Framework: Django & Django REST Framework
-- Auth: djangorestframework-simplejwt (JWT)
-- Database: SQLite
-- Scientific Computing: Pandas, NumPy, Scikit-Learn
+[![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com/)
+[![Django REST Framework](https://img.shields.io/badge/DRF-ff1709?style=for-the-badge&logo=django&logoColor=white)](https://www.django-rest-framework.org/)
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
 ---
 
-### Installation & Setup
+## 📋 Table of Contents
 
-**1. Clone the repository**
-```bash
-git clone https://github.com/YOUR_USERNAME/spendara.git
-cd spendara
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Architecture](#-architecture)
+- [Installation](#-installation)
+- [API Endpoints](#-api-endpoints)
+- [Machine Learning](#-machine-learning)
+- [Screenshots](#-screenshots)
+- [Deployment](#-deployment)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+---
+
+## ✨ Features
+
+- **🔐 JWT Authentication** – Secure user registration and login
+- **📊 Expense Tracking** – Add, edit, and delete expenses with categories
+- **📈 Spending Insights** – Visualize spending patterns with charts
+- **🤖 ML-Powered Forecasts** – Predict future spending using linear regression
+- **📱 Responsive Dashboard** – Works on desktop, tablet, and mobile
+- **🔄 Real-time Updates** – Instant feedback on actions
+
+---
+
+## 🛠️ Tech Stack
+
+### Backend
+| Technology | Purpose |
+| :--- | :--- |
+| **Django** | Web framework |
+| **Django REST Framework** | REST API development |
+| **Simple JWT** | Authentication |
+| **Scikit-Learn** | ML forecasting |
+| **Pandas** | Data processing |
+| **PostgreSQL** | Production database |
+
+### Frontend
+| Technology | Purpose |
+| :--- | :--- |
+| **React** | UI framework |
+| **Axios** | API calls |
+| **Chart.js** | Data visualization |
+| **Tailwind CSS** | Styling |
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart TD
+
+    subgraph Frontend["React Frontend"]
+        A[Dashboard]
+        B[Expense Management]
+        C[ML Predictions]
+    end
+
+    D[Axios API Calls]
+
+    subgraph Backend["Django REST API"]
+        E[JWT Authentication]
+        F[Expense CRUD API]
+        G[ML Forecast API]
+    end
+
+    H[Django ORM]
+
+    subgraph Database["PostgreSQL Database"]
+        I[(Users)]
+        J[(Expenses)]
+        K[(ML Predictions)]
+    end
+
+    A --> D
+    B --> D
+    C --> D
+
+    D --> E
+    D --> F
+    D --> G
+
+    E --> H
+    F --> H
+    G --> H
+
+    H --> I
+    H --> J
+    H --> K
 ```
 
-**2. Backend setup**
-```bash
-python -m venv venv
-source venv/bin/activate      # Windows: venv\Scripts\activate
+---
 
+## 🚀 Installation
+
+### Prerequisites
+- Python 3.11+
+- Node.js 18+
+- PostgreSQL 15+
+- pip
+
+### Backend Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/IshitaSajeev/Spendara.git
+cd Spendara
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
 pip install django djangorestframework djangorestframework-simplejwt django-cors-headers pandas scikit-learn numpy
 
+# Run migrations
+python manage.py makemigrations
 python manage.py migrate
+
+# Create superuser
+python manage.py createsuperuser
+
+# Run the server
 python manage.py runserver
 ```
-Backend runs at `http://127.0.0.1:8000/`.
 
-**3. Frontend setup** (in a new terminal)
+### Frontend Setup
+
 ```bash
-cd spendara_frontend
+cd frontend
+
+# Install dependencies
 npm install
-npm run dev
+
+# Start development server
+npm start
 ```
-Frontend runs at `http://127.0.0.1:5173/`.
+## 📖 API Endpoints
 
-**4. First run**
-- Open the frontend URL, click **Sign up** to create an account.
-- Once logged in, click **Add** to log your first transaction.
-- The forecast and category chart populate automatically as you add expenses.
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/auth/register/` | Create a new user account |
+| `POST` | `/api/token/` | Log in, returns access + refresh JWT |
+| `POST` | `/api/token/refresh/` | Refresh an expired access token |
+| `GET` / `POST` | `/api/transactions/` | List or create transactions (user-scoped) |
+| `GET` / `PUT` / `DELETE` | `/api/transactions/<id>/` | Retrieve, update, or delete a transaction |
+| `GET` / `POST` | `/api/categories/` | List or create categories (user-scoped) |
+| `GET` | `/api/categories/summary/` | Spending totals grouped by category (chart data) |
+| `GET` | `/api/forecast/` | Next month's predicted spending (Linear Regression) |
 
-### Project Structure
-```
-├── spendara_backend/       # Django project settings, URLs, WSGI/ASGI
-├── accounts/                # User registration
-├── transactions/            # Transaction & category models, views, ML forecast logic
-├── spendara_frontend/
-│   ├── src/
-│   │   ├── api/              # Axios instance with JWT attach/refresh
-│   │   ├── context/          # Auth context
-│   │   ├── components/       # Reusable UI (modals, charts, spinner, glow card)
-│   │   ├── pages/             # Login, Register, Dashboard
-│   └── tailwind.config.js
-├── manage.py
-└── README.md
-```
+### Sample API Call
 
-### API Endpoints
-| Endpoint | Method | Description |
-|---|---|---|
-| `/api/auth/register/` | POST | Create a new user account |
-| `/api/token/` | POST | Log in, returns access + refresh JWT |
-| `/api/token/refresh/` | POST | Refresh an expired access token |
-| `/api/transactions/` | GET, POST | List or create transactions (user-scoped) |
-| `/api/transactions/<id>/` | GET, PUT, DELETE | Retrieve, update, or delete a transaction |
-| `/api/categories/` | GET, POST | List or create categories (user-scoped) |
-| `/api/categories/summary/` | GET | Spending totals grouped by category (chart data) |
-| `/api/forecast/` | GET | Next month's predicted spending (Linear Regression) |
+```bash
+# Login and get token
+curl -X POST http://localhost:8000/api/token/ \
+  -H "Content-Type: application/json" \
+  -d '{"username": "demo", "password": "demo123"}'
 
-### Roadmap
-- [ ] Monthly budget limits with overspend alerts
-- [ ] CSV export of transaction history
-- [ ] Multi-currency support
-"# Spendara" 
+# Get spending forecast
+curl -X GET http://localhost:8000/api/forecast/ \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+#Sample Response
+{
+  "status": "success",
+  "forecast": [
+    {"month": "August 2026", "predicted_spending": 12450.75},
+    {"month": "September 2026", "predicted_spending": 13280.20}
+  ],
+  "confidence_score": 0.87
+}
