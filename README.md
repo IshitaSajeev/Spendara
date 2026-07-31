@@ -8,7 +8,7 @@
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 
 <div align="center">
-  <img src="./screenshots/Dashboard Page.png" alt="Spendara dashboard" width="800"/>
+  <img src="./screenshots/dashboard.png" alt="Spendara dashboard" width="800"/>
 </div>
 
 ---
@@ -211,7 +211,7 @@ The forecast model aggregates expenses into **calendar-month totals**, then fits
 
 | Login | Register |
 |---|---|
-| ![login](./screenshots/Login Page.png) | ![register](./screenshots/Signup Page.png) |
+| ![login](./screenshots/login.png) | ![register](./screenshots/signup.png) |
 
 | Spending Breakdown | Add Transaction |
 |---|---|
