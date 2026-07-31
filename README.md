@@ -211,11 +211,11 @@ The forecast model aggregates expenses into **calendar-month totals**, then fits
 
 | Login | Register |
 |---|---|
-| ![login](./screenshots/LoginPage.png) | ![register](./assets/register.png) |
+| ![login](./screenshots/Login Page.png) | ![register](./screenshots/Signup Page.png) |
 
 | Spending Breakdown | Add Transaction |
 |---|---|
-| ![spending-chart](./assets/spending-chart.png) | ![add-transaction](./assets/add-transaction.png) |
+| ![spending-chart](./screenshots/Spending-Chart.png) | ![add-transaction](./screenshots/Add-transaction.png) |
 
 ---
 
