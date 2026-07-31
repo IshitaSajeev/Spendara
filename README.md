@@ -6,33 +6,35 @@
 [![Django REST Framework](https://img.shields.io/badge/DRF-ff1709?style=for-the-badge&logo=django&logoColor=white)](https://www.django-rest-framework.org/)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+
+<div align="center">
+  <img src="./screenshots/Dashboard Page.png" alt="Spendara dashboard" width="800"/>
+</div>
 
 ---
 
 ## 📋 Table of Contents
 
 - [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Architecture](#-architecture)
+- [Tech Stack](#️-tech-stack)
+- [Architecture](#️-architecture)
 - [Installation](#-installation)
 - [API Endpoints](#-api-endpoints)
 - [Machine Learning](#-machine-learning)
 - [Screenshots](#-screenshots)
 - [Deployment](#-deployment)
-- [Contributing](#-contributing)
 - [License](#-license)
 
 ---
 
 ## ✨ Features
 
-- **🔐 JWT Authentication** – Secure user registration and login
-- **📊 Expense Tracking** – Add, edit, and delete expenses with categories
-- **📈 Spending Insights** – Visualize spending patterns with charts
-- **🤖 ML-Powered Forecasts** – Predict future spending using linear regression
-- **📱 Responsive Dashboard** – Works on desktop, tablet, and mobile
-- **🔄 Real-time Updates** – Instant feedback on actions
+- **🔐 JWT Authentication** – Secure user registration and login, all data scoped per user
+- **📊 Expense Tracking** – Add income/expense transactions with custom categories
+- **📈 Spending Insights** – Category-wise spending breakdown via an interactive pie chart
+- **🤖 ML-Powered Forecasts** – Predicts next month's total spending using Linear Regression on completed monthly totals (excludes the current, still-in-progress month to avoid skewed trends)
+- **🎨 Polished UI** – Animated gradient backgrounds, cursor-tracking spotlight cards, and a custom circular loading spinner
+- **🔄 Real-time Updates** – Instant feedback on actions with optimistic UI patterns
 
 ---
 
@@ -44,16 +46,18 @@
 | **Django** | Web framework |
 | **Django REST Framework** | REST API development |
 | **Simple JWT** | Authentication |
-| **Scikit-Learn** | ML forecasting |
-| **Pandas** | Data processing |
-| **PostgreSQL** | Production database |
+| **Scikit-Learn** | ML forecasting (Linear Regression) |
+| **Pandas / NumPy** | Data aggregation & processing |
+| **SQLite** | Default local database (swappable for PostgreSQL in production) |
 
 ### Frontend
 | Technology | Purpose |
 | :--- | :--- |
-| **React** | UI framework |
-| **Axios** | API calls |
-| **Chart.js** | Data visualization |
+| **React (Vite)** | UI framework |
+| **React Router** | Client-side routing & protected routes |
+| **Axios** | API calls with JWT interceptors |
+| **Recharts** | Spending-by-category pie chart |
+| **Framer Motion** | Animations (gradients, transitions, glow cards) |
 | **Tailwind CSS** | Styling |
 
 ---
@@ -65,26 +69,29 @@ flowchart TD
 
     subgraph Frontend["React Frontend"]
         A[Dashboard]
-        B[Expense Management]
-        C[ML Predictions]
+        B[Add Transaction Modal]
+        C[Category Chart]
+        L[Login / Register]
     end
 
-    D[Axios API Calls]
+    D[Axios API Calls + JWT]
 
     subgraph Backend["Django REST API"]
-        E[JWT Authentication]
-        F[Expense CRUD API]
-        G[ML Forecast API]
+        E[JWT Auth - accounts app]
+        F[Transaction / Category CRUD]
+        G[Category Summary Endpoint]
+        M[Budget Forecast Endpoint]
     end
 
     H[Django ORM]
 
-    subgraph Database["PostgreSQL Database"]
+    subgraph Database["SQLite / PostgreSQL"]
         I[(Users)]
-        J[(Expenses)]
-        K[(ML Predictions)]
+        J[(Transactions)]
+        K[(Categories)]
     end
 
+    L --> D
     A --> D
     B --> D
     C --> D
@@ -92,10 +99,12 @@ flowchart TD
     D --> E
     D --> F
     D --> G
+    D --> M
 
     E --> H
     F --> H
     G --> H
+    M --> H
 
     H --> I
     H --> J
@@ -107,9 +116,8 @@ flowchart TD
 ## 🚀 Installation
 
 ### Prerequisites
-- Python 3.11+
+- Python 3.10+
 - Node.js 18+
-- PostgreSQL 15+
 - pip
 
 ### Backend Setup
@@ -127,27 +135,30 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install django djangorestframework djangorestframework-simplejwt django-cors-headers pandas scikit-learn numpy
 
 # Run migrations
-python manage.py makemigrations
 python manage.py migrate
-
-# Create superuser
-python manage.py createsuperuser
 
 # Run the server
 python manage.py runserver
 ```
+Backend runs at `http://127.0.0.1:8000/`
 
 ### Frontend Setup
 
 ```bash
-cd frontend
+cd spendara_frontend
 
 # Install dependencies
 npm install
 
 # Start development server
-npm start
+npm run dev
 ```
+Frontend runs at `http://127.0.0.1:5173/`
+
+**First use:** register a new account on `/register`, then log in — all transactions are scoped to your logged-in user.
+
+---
+
 ## 📖 API Endpoints
 
 | Method | Endpoint | Description |
@@ -165,20 +176,65 @@ npm start
 
 ```bash
 # Login and get token
-curl -X POST http://localhost:8000/api/token/ \
+curl -X POST http://127.0.0.1:8000/api/token/ \
   -H "Content-Type: application/json" \
   -d '{"username": "demo", "password": "demo123"}'
 
 # Get spending forecast
-curl -X GET http://localhost:8000/api/forecast/ \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+curl -X GET http://127.0.0.1:8000/api/forecast/ \
+  -H "Authorization: Bearer <your_access_token>"
+```
 
-#Sample Response
+**Sample Response:**
+```json
 {
-  "status": "success",
-  "forecast": [
-    {"month": "August 2026", "predicted_spending": 12450.75},
-    {"month": "September 2026", "predicted_spending": 13280.20}
-  ],
-  "confidence_score": 0.87
+  "predicted_spending_next_month": 27399.0,
+  "data_points_used": 20,
+  "months_used": 2,
+  "current_month_to_date": 19600.0,
+  "message": "AI prediction generated using Linear Regression on completed monthly totals.",
+  "algorithm": "Linear Regression (completed monthly totals)"
 }
+```
+
+---
+
+## 🤖 Machine Learning
+
+The forecast model aggregates expenses into **calendar-month totals**, then fits a Linear Regression on `month_index → total_spent` to predict next month's total.
+
+**Key design decision:** the current, still-in-progress month is excluded from training. Comparing a complete month against a partial one would make spending look artificially lower — not because you're spending less, but because the month simply isn't over yet. If fewer than 2 completed months exist, the model falls back to the last known total instead of guessing from insufficient data.
+
+---
+
+## 📸 Screenshots
+
+| Login | Register |
+|---|---|
+| ![login](./screenshots/Login Page.png) | ![register](./screenshots/Signup Page.png) |
+
+| Spending Breakdown | Add Transaction |
+|---|---|
+| ![spending-chart](./screenshots/Spending-Chart.png) | ![add-transaction](./screenshots/Add-transaction.png) |
+
+---
+
+## 🌐 Deployment
+
+Not yet deployed. Planned stack:
+- **Frontend:** Vercel
+- **Backend:** Render
+- **Database:** Neon or Supabase (PostgreSQL)
+
+---
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for details.
+
+---
+
+## 👩‍💻 Author
+
+**Ishita Sajeev**
+[GitHub](https://github.com/IshitaSajeev) · [LinkedIn](https://linkedin.com/in/ishita-sajeev)
