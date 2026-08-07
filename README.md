@@ -29,8 +29,8 @@
 
 ## ✨ Features
 
-- **🔐 JWT Authentication** – Secure user registration and login, all data scoped per user
-- **📊 Expense Tracking** – Add income/expense transactions with custom categories
+- **🔐 JWT Authentication** – Secure user registration and login, all data scoped per user.
+- **📊 Expense Tracking** – Add income/expense transactions with custom categories.
 - **📈 Spending Insights** – Category-wise spending breakdown via an interactive pie chart
 - **🤖 ML-Powered Forecasts** – Predicts next month's total spending using Linear Regression on completed monthly totals (excludes the current, still-in-progress month to avoid skewed trends)
 - **🎨 Polished UI** – Animated gradient backgrounds, cursor-tracking spotlight cards, and a custom circular loading spinner
