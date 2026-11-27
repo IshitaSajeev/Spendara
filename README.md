@@ -1,6 +1,11 @@
 # 💰 Spendara
 
-> AI-powered personal finance tracker with JWT authentication, ML-driven spending forecasts, and category-level insights.
+Full-stack personal finance tracker: Django REST Framework API with JWT auth, React frontend, and a scikit-learn model that forecasts next month's spending.
+
+- Register and log in with JWT; each user sees only their own data
+- Add income/expense transactions with custom categories
+- Category-wise spending breakdown (pie chart)
+- Next-month spending forecast from completed monthly totals (Linear Regression)
 
 [![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com/)
 [![Django REST Framework](https://img.shields.io/badge/DRF-ff1709?style=for-the-badge&logo=django&logoColor=white)](https://www.django-rest-framework.org/)
@@ -8,22 +13,8 @@
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 
 <div align="center">
-  <img src="./screenshots/Dashboard Page.png" alt="Spendara dashboard" width="800"/>
+  <img src="./screenshots/dashboard.png" alt="Spendara dashboard" width="800"/>
 </div>
-
----
-
-## 📋 Table of Contents
-
-- [Features](#-features)
-- [Tech Stack](#️-tech-stack)
-- [Architecture](#️-architecture)
-- [Installation](#-installation)
-- [API Endpoints](#-api-endpoints)
-- [Machine Learning](#-machine-learning)
-- [Screenshots](#-screenshots)
-- [Deployment](#-deployment)
-- [License](#-license)
 
 ---
 
@@ -211,7 +202,7 @@ The forecast model aggregates expenses into **calendar-month totals**, then fits
 
 | Login | Register |
 |---|---|
-| ![login](./screenshots/Login Page.png) | ![register](./screenshots/Signup Page.png) |
+| ![login](./screenshots/login.png) | ![register](./screenshots/signup.png) |
 
 | Spending Breakdown | Add Transaction |
 |---|---|
