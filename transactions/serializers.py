@@ -31,3 +31,8 @@ class TransactionSerializer(serializers.ModelSerializer):
         if value <= 0:
             raise serializers.ValidationError("Amount must be greater than zero.")
         return value
+    
+    def validate_category(self, value):
+        if value is not None and value.user != self.context['request'].user:
+            raise serializers.ValidationError("Invalid category.")
+        return value
